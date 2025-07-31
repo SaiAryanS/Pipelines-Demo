@@ -2,24 +2,19 @@ trigger:
 - main
 
 pool:
-  vmImage:'ubuntu-latest'
+  vmImage: 'Default'
 
 stages:
-  -stage: Build
-  displayName: 'Build Stage'
+- stage: Build
   jobs:
-  - job: BuildJob
-    displayName: 'Run Hello World Script'
+  - job: BuildAndTest
     steps:
-    - script: echo "Hello World"
-      displayName: 'Print Hello World'
+      
+      - script: npm install
+        displayName: 'Install Dependencies'
 
-- stage: Deploy
-  displayName: 'Deploy Stage'
-  dependsOn: Build
-  jobs:
-  - job: DeployJob
-    displayName: 'Run Deploy Script'
-    steps:
-    - script: echo "Deploying"
-      displayName: 'Print Deploying'
+      
+      - task: Npm@1
+        inputs:
+          command: 'test'
+        displayName: 'Run Unit Tests'
